@@ -1,0 +1,13 @@
+global class PostmanHttp {
+    
+    global static void getPostmanData()
+    {
+        Http http = new http();
+        HttpRequest request = new HttpRequest();
+        request.setMethod('GET');
+        request.setEndpoint('https://postman-echo.com/get?foo1=bar1&foo2=bar2');
+        HttpResponse response = http.send(request);  
+        System.debug('Response from the service is : ' + response.getBody());
+    }
+
+}

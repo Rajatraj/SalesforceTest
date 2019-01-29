@@ -1,0 +1,45 @@
+/*added field 'number_of_contacts__c' to account object*/
+trigger UpdateAccountForContacts on Contact (after insert, after delete, after undelete) {
+    
+    set<ID> lstAccountId =  new set<ID>();
+    List<Account> updateNumber = new List<Account>();
+    
+    
+    
+    if(Trigger.IsAfter)
+    {
+        if(Trigger.IsInsert || Trigger.IsUndelete)
+        {
+            System.debug('Trigger Elements in New : ' + Trigger.new);
+            for(Contact c : Trigger.New)
+            {
+                System.debug('Trigger Elements : ' + c);
+     			if(c.AccountId != null)
+                {
+                    lstAccountId.add(c.AccountId);
+                }
+            }
+        }
+    }
+    if(Trigger.IsDelete)
+    {
+        for(Contact c : Trigger.old)
+        {
+            if(c.AccountId != null)
+            {
+                lstAccountId.add(c.AccountId);
+            }
+        }
+    }
+    
+    List<Account> acc = new List<Account>([select id, Name, number_of_contacts__c, (Select id, Name From Contacts) from Account where id in : lstAccountId]);
+    
+    for(Account a : acc)
+    {
+        List<contact> con = a.contacts;
+        a.number_of_contacts__c = con.size();
+        updateNumber.add(a);
+    }
+
+    upsert updateNumber;
+}

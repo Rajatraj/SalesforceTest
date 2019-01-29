@@ -1,0 +1,7 @@
+<aura:component controller = "AccountSearchController">
+    <aura:iteration items = "{!getAccounts}" var = "Account">
+        <tr>
+            <td><div title = "{!Account.name}"/></td>
+        </tr>
+    </aura:iteration>
+</aura:component>

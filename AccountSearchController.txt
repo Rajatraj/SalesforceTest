@@ -1,0 +1,8 @@
+public class AccountSearchController {
+
+    @AuraEnabled
+      public static List <Account> getAccounts() {
+      return [SELECT Id, name FROM Account ORDER BY createdDate ASC];
+      }
+    
+}
